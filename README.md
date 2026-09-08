@@ -11,10 +11,12 @@ This is **not** a chatbot. The chatbot-looking part (the "AI Playground",
 built much later) is a thin demo on top of the real point of the project:
 governance and controlled AI adoption.
 
-> **Status: Phase 1 — Foundation.** Only the base stack is built so far:
-> a React dashboard talking to a FastAPI backend talking to a SQLite
-> database. No governance, risk, or AI logic yet — that comes in later
-> phases, one at a time.
+> **Status: Phase 2 — Enterprise Systems.** The Phase 1 foundation (React
+> dashboard ↔ FastAPI ↔ SQLite) plus a full Enterprise Systems module:
+> five simulated systems (ERP, HR, Finance, Customer Support, Sales) you
+> can list, search, filter, view in detail, add, and remove. No
+> readiness scoring, risk engine, or governance logic yet — that starts
+> in Phase 4 onward.
 
 ## Why this stack (zero cost, by design)
 
@@ -36,7 +38,7 @@ ai-bridge/
 ├── backend/           Python + FastAPI API
 ├── database/          (reserved — SQLite file currently lives in backend/)
 ├── docs/               Architecture and design notes
-├── mock-data/         (reserved for Phase 2 — simulated enterprise systems)
+├── mock-data/         enterprise_systems.json — the 5 seed enterprise systems
 ├── tests/              (reserved — automated tests, added as logic appears)
 ├── infrastructure/     (reserved — optional AWS deployment, Phase 2 of the roadmap)
 ├── .gitignore
@@ -91,46 +93,56 @@ npm run dev
 ```
 
 Open **http://localhost:5173** — you should see the AI Bridge dashboard.
+If `npm install` complains about `react-router-dom` missing, that's new
+in Phase 2 — `npm install` in a folder with an updated `package.json`
+always picks up new dependencies automatically, no extra step needed.
 
-## Checklist — Phase 1 is working when...
+## Checklist — Phase 1 (Foundation) is working when...
 
 - [ ] `http://localhost:8000/` returns a JSON welcome message
-- [ ] `http://localhost:8000/docs` shows the interactive API docs with a `/api/health` endpoint
-- [ ] Calling `GET /api/health` (from `/docs`, or `curl http://localhost:8000/api/health`) returns `"status": "ok"` and `"database": "connected"`
-- [ ] A file `backend/ai_bridge.db` exists after that call
-- [ ] `http://localhost:5173` loads the dashboard with the AI Bridge header
-- [ ] The dashboard's "Backend connection" card turns **green** and shows real numbers (status, database, health checks recorded, server time)
-- [ ] Refreshing the dashboard increases "Health checks recorded" by 1 each time (proof it's live data, not hardcoded)
-- [ ] Stopping the backend and refreshing the dashboard shows a **red** error card instead of a crash
+- [ ] `http://localhost:8000/docs` shows the interactive API docs
+- [ ] Calling `GET /api/health` returns `"status": "ok"` and `"database": "connected"`
+- [ ] The Dashboard's "Backend connection" card turns **green** with real numbers
+- [ ] Refreshing the dashboard increases "Health checks recorded" by 1 each time
+- [ ] Stopping the backend and refreshing shows a **red** error card instead of a crash
 
-If the last two both behave as described, you've proven the full chain —
-frontend, backend, and database — actually works together, not just that
-each piece runs in isolation.
+## Checklist — Phase 2 (Enterprise Systems) is working when...
+
+- [ ] `http://localhost:8000/docs` now also shows `/api/systems` endpoints (GET list, GET one, POST, PUT, DELETE)
+- [ ] The nav bar at the top now shows **Dashboard** and **Enterprise Systems**
+- [ ] `http://localhost:5173/systems` shows a table with **5 systems already filled in**: Corporate ERP, HR Management System, Finance Database, Customer Support System, Sales Database
+- [ ] Typing in the search box narrows the table live (try "Finance")
+- [ ] The status filter and integration-type filter both narrow the table
+- [ ] Clicking **View Details →** on any row opens that system's detail page with four sections: Overview, Integration, Data, AI Readiness
+- [ ] The AI Readiness section says "Not assessed yet" and its button is greyed out / unclickable
+- [ ] Clicking **+ Add System**, filling the form, and submitting adds a new row to the table without a page reload
+- [ ] Clicking **Remove this system** on a details page asks for confirmation, then returns you to the list with that system gone
+- [ ] Restarting the backend does **not** re-add the 5 example systems if you've already changed them (seeding only happens once, on an empty database)
 
 ## A note on verification
 
-This project was scaffolded and syntax-checked in a cloud sandbox whose
-network policy blocks package installs (`pip`/`npm`) for security reasons —
-so I could not run the full `pip install` / `npm install` / `uvicorn` /
-`npm run dev` loop end-to-end before handing it to you. The Python files
-passed a syntax check, and everything follows standard, well-documented
-FastAPI/Vite patterns, but please run the checklist above yourself the
-first time — and tell me what you see (including any error) so we can fix
-anything together before moving to Phase 2.
+This project is built and syntax-checked in a cloud sandbox whose network
+policy blocks package installs (`pip`/`npm`) for security reasons, so
+I can't run the full install/run loop end-to-end before handing each
+phase to you. Python files are syntax-checked every time; everything
+follows standard, well-documented FastAPI/React patterns. Please run the
+checklist yourself and tell me what you see (including any error) — that's
+how we catch anything together before moving to the next phase.
 
 ## Git
 
-This repo was initialized with `git init` and has one commit ("Phase 1:
-Foundation"). Going forward, a reasonable habit is one commit per phase:
+One commit per phase is a reasonable habit:
 
 ```bash
 git add .
 git commit -m "Phase 2: Enterprise Systems"
+git push
 ```
 
 ## What's next (not built yet)
 
-Phase 2 adds simulated enterprise systems (Corporate ERP, HR, Finance,
-Support, Sales) so later phases have something realistic to connect to,
-assess, and govern. We build it only when you're ready and have confirmed
-Phase 1 works for you.
+Phase 3 (Legacy-to-AI Adapter) takes one enterprise system's raw data and
+runs it through extraction → validation → normalization → classification
+→ sensitive-data detection, showing a before/after in the UI. It builds
+directly on the enterprise systems created in this phase. We build it
+only when you're ready and have confirmed Phase 2 works for you.

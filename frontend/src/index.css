@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/*
+ * Phase 2 adds a real form (AddSystemModal.tsx) with a lot of inputs
+ * and selects that all need the same look. Instead of repeating the
+ * same long Tailwind class list on every <input> and <select>, we
+ * define one reusable class here with @apply and use `className="input"`
+ * everywhere. This is Tailwind's own recommended escape hatch for
+ * "the same combination of utilities, used in many places".
+ */
+@layer components {
+  .input {
+    @apply w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none;
+  }
+}

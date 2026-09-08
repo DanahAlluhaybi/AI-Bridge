@@ -6,8 +6,9 @@ The entry point of the backend. This is what `uvicorn app.main:app` runs.
 Responsibilities, and only these, on purpose:
 1. Create the FastAPI application object.
 2. Make sure the database tables exist.
-3. Allow the frontend (running on a different port) to call us (CORS).
-4. Wire up the routers (currently just health).
+3. Seed example data if the database is empty (Phase 2).
+4. Allow the frontend (running on a different port) to call us (CORS).
+5. Wire up the routers (health, and now enterprise systems).
 
 Business logic (readiness scoring, risk rules, governance policies...)
 will live in their own modules in later phases -- main.py stays thin
@@ -17,8 +18,9 @@ forever, it's just the "switchboard".
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .database import Base, engine
-from .routers import health
+from .database import Base, SessionLocal, engine
+from .routers import health, systems
+from .seed_data import seed_enterprise_systems
 
 # Create any tables defined in models.py that don't exist yet.
 # In a real production system you'd use migrations (e.g. Alembic) instead
@@ -27,13 +29,25 @@ from .routers import health
 # option -- we'll call out explicitly if/when we outgrow it.
 Base.metadata.create_all(bind=engine)
 
+# Insert the five example enterprise systems, but only the first time
+# this database is used (see seed_data.py -- it checks before inserting).
+# We open and close a session manually here because this runs once at
+# startup, outside of any HTTP request, so there's no `Depends(get_db)`
+# to do it for us.
+_startup_db = SessionLocal()
+try:
+    seed_enterprise_systems(_startup_db)
+finally:
+    _startup_db.close()
+
 app = FastAPI(
     title="AI Bridge API",
     description=(
         "Backend for AI Bridge — an Enterprise AI Infrastructure platform. "
-        "Phase 1: Foundation only (no governance/risk logic yet)."
+        "Phase 2: Foundation + simulated Enterprise Systems "
+        "(no readiness/risk/governance logic yet)."
     ),
-    version="0.1.0",
+    version="0.2.0",
 )
 
 # Browsers block a webpage on one origin (http://localhost:5173, the Vite
@@ -50,6 +64,7 @@ app.add_middleware(
 )
 
 app.include_router(health.router, prefix="/api", tags=["health"])
+app.include_router(systems.router, prefix="/api", tags=["enterprise-systems"])
 
 
 @app.get("/")

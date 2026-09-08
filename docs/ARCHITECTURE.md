@@ -101,9 +101,9 @@ ai-bridge/
 │                       name at the repo root because later phases may
 │                       add seed scripts / migrations here
 ├── docs/              # documents like this one
-├── mock-data/         # reserved for Phase 2's simulated enterprise systems
+├── mock-data/         # enterprise_systems.json — Phase 2's seed data
 ├── tests/             # reserved — added once there's real logic to test
-│                       (Phase 1 has no business logic worth unit-testing yet)
+│                       (Phase 1/2 have no business logic worth unit-testing yet)
 ├── infrastructure/    # reserved for the OPTIONAL AWS phase (Phase 2 of the
 │                       original roadmap) — empty until then
 ```
@@ -117,10 +117,108 @@ its own run command, and can eventually be deployed independently.
 - No authentication — Phase 6 (Governance Gateway) introduces it, because
   "who is allowed to do this" only matters once there's something worth
   protecting.
-- No enterprise systems, no readiness score, no risk engine, no policies —
-  Phases 2, 4, 5, 6.
+- No readiness score, no risk engine, no governance policies — Phases 4,
+  5, 6.
 - No AI provider abstraction (`MockAIProvider` / `CloudAIProvider`) —
   Phase 10 (AI Playground) is the first phase that actually calls one.
 
 Building these now would mean code you haven't been walked through yet —
 against the explicit "learning-first" instruction for this project.
+
+---
+
+# Phase 2: Enterprise Systems
+
+## What Phase 2 adds
+
+Phase 1 proved the pipes work. Phase 2 puts something real into them: a
+database table, a set of API endpoints, and two new pages that together
+form a small but complete CRUD (Create, Read, Update, Delete) module for
+"enterprise systems" — the simulated ERP, HR, Finance, Customer Support,
+and Sales systems that later phases will assess, score, and govern.
+
+This phase deliberately does **not** touch AI, risk, or governance. It
+only answers one question: *what systems does AI Bridge know about, and
+what do we know about each one?* Everything from Phase 3 onward asks
+questions like "is THIS system's data AI-ready?" — that question is
+meaningless until there's a "this system" to ask it about.
+
+## How the three layers communicate (the new part)
+
+Phase 1 had one round trip: Dashboard → `/api/health` → SQLite → back.
+Phase 2 introduces a pattern that repeats for the rest of the project —
+a **layer in between** the database and the API response:
+
+```
+SQLite row (backend/app/models.py: EnterpriseSystem)
+        │  SQLAlchemy reads it as a Python object
+        ▼
+Pydantic schema (backend/app/schemas.py: EnterpriseSystemOut)
+        │  validates + shapes it into an API contract
+        ▼
+JSON response
+        │  fetch() in the browser
+        ▼
+TypeScript type (frontend/src/types.ts: EnterpriseSystem)
+        │  same shape, re-declared in TypeScript so the editor can
+        │  catch mistakes (e.g. system.staus instead of system.status)
+        ▼
+React component (EnterpriseSystems.tsx / SystemDetails.tsx)
+```
+
+Three representations of "one enterprise system" exist on purpose — a
+SQL row, a Pydantic schema, a TypeScript type — because each layer cares
+about different things: the database cares about storage, the API layer
+cares about what's a valid request/response, the frontend cares about
+what TypeScript can check at compile time. Keeping them separate (rather
+than one shared "god object") is what makes it safe to change one layer
+(e.g. add a field to the database) without silently breaking another.
+
+## New files, and why each exists
+
+**Backend**
+- `backend/app/schemas.py` — Pydantic request/response shapes and the
+  five controlled-vocabulary Enums (SystemType, IntegrationType,
+  DataClassification, SecurityLevel, SystemStatus).
+- `backend/app/routers/systems.py` — the five CRUD endpoints.
+- `backend/app/seed_data.py` — loads `mock-data/enterprise_systems.json`
+  into the database once, if it's empty.
+- `backend/app/models.py` — gained one new table, `EnterpriseSystem`.
+- `backend/app/main.py` — now runs the seed step at startup and
+  registers the new router.
+
+**Frontend**
+- `frontend/src/types.ts` — the TypeScript mirror of `schemas.py`.
+- `frontend/src/api/systems.ts` — `listSystems`, `getSystem`,
+  `createSystem`, `updateSystem`, `deleteSystem`.
+- `frontend/src/components/Layout.tsx` — shared header + navigation,
+  now that there's more than one page.
+- `frontend/src/components/Badge.tsx` — the small colored status pill,
+  reused across both new pages.
+- `frontend/src/components/AddSystemModal.tsx` — the "Add System" form.
+- `frontend/src/pages/EnterpriseSystems.tsx` — the list/search/filter
+  page.
+- `frontend/src/pages/SystemDetails.tsx` — the per-system detail page.
+- `frontend/src/App.tsx`, `main.tsx` — now use `react-router-dom` to
+  switch between pages instead of always rendering `<Dashboard />`.
+
+## Why an Enum-based controlled vocabulary
+
+`system_type`, `integration_type`, `data_classification`, `security_level`,
+and `status` are all restricted to a fixed list of values (in
+`schemas.py`, and mirrored as TypeScript union types). This isn't
+FastAPI/Pydantic ceremony for its own sake — it's how real enterprise
+data governance tools work: if "Confidential" can also be typed as
+"confidential", "CONFIDENTIAL", or "Sensitive", then Phase 4's readiness
+score and Phase 6's policy engine can't reliably group or count systems
+by classification. Locking the vocabulary down now, while there are only
+five systems, is much cheaper than discovering the inconsistency later.
+
+## Why the mock data lives in its own JSON file
+
+`mock-data/enterprise_systems.json` holds the five example systems as
+plain data. `backend/app/seed_data.py` just reads that file and inserts
+rows. Keeping "the data" and "the code that loads the data" separate
+means you can open the JSON file and edit an example system's fields
+without touching any Python — and it's also *why* the `mock-data/`
+folder existed (empty) since Phase 1: it was reserved for exactly this.

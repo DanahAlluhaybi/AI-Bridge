@@ -1,0 +1,62 @@
+[
+  {
+    "name": "Corporate ERP",
+    "system_type": "ERP",
+    "department": "Operations",
+    "owner": "Fahad Al-Otaibi — IT Systems Director",
+    "integration_type": "SQL Database",
+    "data_types": ["Inventory", "Procurement", "Vendor Records", "Financial Transactions"],
+    "data_classification": "Confidential",
+    "security_level": "High",
+    "status": "Connected",
+    "data_source": "sql://internal-db.mock/erp_prod"
+  },
+  {
+    "name": "HR Management System",
+    "system_type": "HR Management",
+    "department": "Human Resources",
+    "owner": "Lama Al-Qahtani — HR Systems Manager",
+    "integration_type": "REST API",
+    "data_types": ["Employee Records", "Payroll", "Attendance", "Personal Information"],
+    "data_classification": "Restricted",
+    "security_level": "Critical",
+    "status": "Connected",
+    "data_source": "https://internal-hris.mock/api/v1"
+  },
+  {
+    "name": "Finance Database",
+    "system_type": "Finance",
+    "department": "Finance",
+    "owner": "Sultan Al-Harbi — Finance Controller",
+    "integration_type": "SQL Database",
+    "data_types": ["Ledger Entries", "Invoices", "Budget Data", "Bank Transactions"],
+    "data_classification": "Restricted",
+    "security_level": "Critical",
+    "status": "Pending",
+    "data_source": "sql://internal-db.mock/finance_prod"
+  },
+  {
+    "name": "Customer Support System",
+    "system_type": "Customer Support",
+    "department": "Customer Experience",
+    "owner": "Reem Al-Dosari — Support Operations Lead",
+    "integration_type": "JSON",
+    "data_types": ["Support Tickets", "Chat Transcripts", "Customer Contact Info"],
+    "data_classification": "Confidential",
+    "security_level": "Medium",
+    "status": "Connected",
+    "data_source": "/feeds/support_tickets_export.json"
+  },
+  {
+    "name": "Sales Database",
+    "system_type": "Sales",
+    "department": "Sales",
+    "owner": "Yousef Al-Ghamdi — Sales Operations Manager",
+    "integration_type": "CSV",
+    "data_types": ["Leads", "Opportunities", "Sales Pipeline", "Customer Accounts"],
+    "data_classification": "Internal",
+    "security_level": "Medium",
+    "status": "Disconnected",
+    "data_source": "/exports/sales_pipeline_daily.csv"
+  }
+]
