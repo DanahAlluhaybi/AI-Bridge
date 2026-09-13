@@ -1,0 +1,79 @@
+[
+  {
+    "id": "SYS-A",
+    "name": "Synthetic System A",
+    "note": "High readiness, low risk -- the clear-cut good case.",
+    "readiness_score": 95,
+    "risk_level": "Low"
+  },
+  {
+    "id": "SYS-B",
+    "name": "Synthetic System B",
+    "note": "High readiness, medium risk -- ready, but needs oversight.",
+    "readiness_score": 85,
+    "risk_level": "Medium"
+  },
+  {
+    "id": "SYS-C",
+    "name": "Synthetic System C",
+    "note": "Moderate readiness, low risk -- safe, but not ready yet.",
+    "readiness_score": 55,
+    "risk_level": "Low"
+  },
+  {
+    "id": "SYS-D",
+    "name": "Synthetic System D",
+    "note": "Low readiness, high risk -- neither dimension supports adoption.",
+    "readiness_score": 40,
+    "risk_level": "High"
+  },
+  {
+    "id": "SYS-E",
+    "name": "Synthetic System E",
+    "note": "High readiness, critical risk -- risk overrides an otherwise-good readiness score.",
+    "readiness_score": 90,
+    "risk_level": "Critical"
+  },
+  {
+    "id": "SYS-F",
+    "name": "Synthetic System F",
+    "note": "Edge case: high readiness + high risk. Technically ready, but shouldn't be handed full automation.",
+    "readiness_score": 90,
+    "risk_level": "High"
+  },
+  {
+    "id": "SYS-G",
+    "name": "Synthetic System G",
+    "note": "Edge case: low readiness + low risk. Safe, but the underlying system still isn't ready.",
+    "readiness_score": 50,
+    "risk_level": "Low"
+  },
+  {
+    "id": "SYS-H",
+    "name": "Synthetic System H",
+    "note": "Missing Readiness assessment -- Bridge should say so, not guess.",
+    "readiness_score": null,
+    "risk_level": "Low"
+  },
+  {
+    "id": "SYS-I",
+    "name": "Synthetic System I",
+    "note": "Missing Risk assessment -- Bridge should say so, not guess.",
+    "readiness_score": 80,
+    "risk_level": null
+  },
+  {
+    "id": "SYS-J",
+    "name": "Synthetic System J",
+    "note": "Readiness above the minimum floor but below the ready threshold, risk Medium.",
+    "readiness_score": 65,
+    "risk_level": "Medium"
+  },
+  {
+    "id": "SYS-K",
+    "name": "Synthetic System K",
+    "note": "Same readiness band as SYS-J, but risk High instead of Medium.",
+    "readiness_score": 65,
+    "risk_level": "High"
+  }
+]

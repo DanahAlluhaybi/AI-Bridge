@@ -6,6 +6,7 @@
 
 import { useState, type FormEvent, type ReactNode } from "react";
 import { createSystem } from "../api/systems";
+import Button from "./Button";
 import type { EnterpriseSystemInput } from "../types";
 import {
   DATA_CLASSIFICATIONS,
@@ -36,8 +37,8 @@ const EMPTY_FORM: EnterpriseSystemInput = {
 export default function AddSystemModal({ onClose, onCreated }: Props) {
   const [form, setForm] = useState<EnterpriseSystemInput>(EMPTY_FORM);
   // data_types is a list on the backend, but a comma-separated text
-  // field is a much simpler UI than "add tag" buttons for an MVP -- we
-  // split it into an array right before submitting.
+  // field is a much simpler UI than "add tag" buttons -- we split it
+  // into an array right before submitting.
   const [dataTypesText, setDataTypesText] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -61,9 +62,9 @@ export default function AddSystemModal({ onClose, onCreated }: Props) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 px-4">
-      <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-lg bg-white p-6 shadow-xl">
-        <h3 className="mb-4 text-lg font-medium">Add Enterprise System</h3>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/30 px-4">
+      <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-xl bg-white p-6 shadow-popover">
+        <h3 className="mb-4 text-base font-semibold text-slate-900">Add Enterprise System</h3>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <Field label="System name">
@@ -217,20 +218,12 @@ export default function AddSystemModal({ onClose, onCreated }: Props) {
           {error && <p className="text-sm text-red-600">{error}</p>}
 
           <div className="flex justify-end gap-3 pt-2">
-            <button
-              type="button"
-              onClick={onClose}
-              className="rounded-md px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100"
-            >
+            <Button type="button" variant="ghost" onClick={onClose}>
               Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={submitting}
-              className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 disabled:opacity-50"
-            >
-              {submitting ? "Creating…" : "Create System"}
-            </button>
+            </Button>
+            <Button type="submit" disabled={submitting}>
+              {submitting ? "Creating…" : "Create system"}
+            </Button>
           </div>
         </form>
       </div>

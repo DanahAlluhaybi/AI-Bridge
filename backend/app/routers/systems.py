@@ -1,19 +1,12 @@
 """
 routers/systems.py
--------------------
-Full CRUD (Create, Read, Update, Delete) for enterprise systems.
 
-Five endpoints, matching the Phase 2 spec exactly:
+Full CRUD for enterprise systems:
     GET    /api/systems         -> list all (with optional filters)
     GET    /api/systems/{id}    -> get one
     POST   /api/systems         -> create
     PUT    /api/systems/{id}    -> update
     DELETE /api/systems/{id}    -> delete
-
-Every function follows the same shape: accept validated input (FastAPI
-+ Pydantic already checked it before we get here), do one thing to the
-database via SQLAlchemy, return something JSON-serializable (FastAPI
-converts it using the `response_model` schema).
 """
 
 from typing import List, Optional
@@ -41,13 +34,10 @@ def list_systems(
     db: Session = Depends(get_db),
 ):
     """
-    The frontend actually filters client-side for instant feedback (see
-    EnterpriseSystems.tsx), so in normal use this endpoint is called
-    with no query parameters and just returns everything. The filters
-    below are still real and independently testable from /docs --
-    once there are hundreds of systems instead of five, filtering on
-    the server (so the browser never downloads rows it won't show) is
-    what you'd switch to.
+    The frontend filters client-side (see EnterpriseSystems.tsx), so in
+    practice this is usually called with no query parameters. The
+    filters are still real and testable from /docs, and matter once
+    the dataset is too large to send to the browser in one response.
     """
     query = db.query(models.EnterpriseSystem)
 
@@ -77,11 +67,9 @@ def get_system(system_id: int, db: Session = Depends(get_db)):
 def create_system(
     payload: schemas.EnterpriseSystemCreate, db: Session = Depends(get_db)
 ):
-    # payload.model_dump() turns the validated Pydantic object into a
-    # plain dict. Because SystemType/IntegrationType/etc. are `str`
-    # Enums, their values come out as plain strings ("ERP", not
-    # SystemType.ERP) -- exactly what the String columns in models.py
-    # expect.
+    # model_dump() turns the validated Pydantic object into a plain
+    # dict; the Enum fields serialize to their string values, which is
+    # what the String columns in models.py expect.
     system = models.EnterpriseSystem(**payload.model_dump())
     db.add(system)
     db.commit()
@@ -99,9 +87,9 @@ def update_system(
     if system is None:
         raise HTTPException(status_code=404, detail="Enterprise system not found")
 
-    # exclude_unset=True is the key detail: it only includes fields the
-    # client actually sent, so `{"status": "Connected"}` doesn't wipe
-    # out every other field back to null.
+    # exclude_unset=True: only fields the client actually sent get
+    # applied, so a partial update like {"status": "Connected"} doesn't
+    # null out every other field.
     updates = payload.model_dump(exclude_unset=True)
     for field, value in updates.items():
         setattr(system, field, value)

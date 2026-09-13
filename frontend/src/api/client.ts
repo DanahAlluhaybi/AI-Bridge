@@ -1,9 +1,7 @@
-// A single, small place that knows how to talk to the backend.
-// Every future page (Enterprise Systems, AI Readiness, Governance...)
-// will import from a file like this one instead of hardcoding fetch()
-// calls all over the UI. That way, if the backend URL ever changes
-// (e.g. moving to AWS API Gateway in the optional Phase 2), we change
-// it in exactly one place.
+// A single, small place that knows how to talk to the backend health
+// endpoint. Every page imports its API calls from a file like this one
+// instead of hardcoding fetch() calls all over the UI, so if the
+// backend URL ever changes, it changes in exactly one place.
 
 const API_BASE_URL = "http://localhost:8000/api";
 

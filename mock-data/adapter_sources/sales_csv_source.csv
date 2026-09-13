@@ -1,0 +1,7 @@
+record_id,full_name,city,country,phone,email,national_id,employee_id,amount,date_field,notes
+LEAD-5001,Abdullah Al-Malki,Jeddah,Saudi Arabia,+966501234000,abdullah.m@leadmail.mock,,,25000.00,2026-04-01,Interested in enterprise plan
+LEAD-5002,Norah Al-Shehri,jeddah,ksa,0509990000,norah.s@leadmail.mock,,,18000.00,01/04/2026,
+LEAD-5003,Majed Al-Dossari,Riyadh,Saudi Arabia,,majed.d@leadmail.mock,,,,2026-04-03,Follow-up needed next quarter
+LEAD-5002,Norah Al-Shehri,jeddah,ksa,0509990000,norah.s@leadmail.mock,,,18000.00,01/04/2026,
+LEAD-5004,,Khobar,Saudi Arabia,+966522334455,,,,9000.00,4-4-2026,Lead name missing from CRM export
+LEAD-5005,Reem Al-Amri,RIYADH,SA,+966533221100,reem.a@leadmail.mock,,,31000.00,2026-04-05,"High-value opportunity, priority follow-up"

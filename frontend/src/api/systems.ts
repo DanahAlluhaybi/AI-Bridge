@@ -1,7 +1,6 @@
-// Same idea as api/client.ts from Phase 1: one file that knows how to
-// talk to the /api/systems endpoints, so pages call plain functions
-// like listSystems() instead of repeating fetch() + error handling
-// everywhere they need enterprise system data.
+// One file that knows how to talk to the /api/systems endpoints, so
+// pages call plain functions like listSystems() instead of repeating
+// fetch() + error handling everywhere they need enterprise system data.
 
 import type { EnterpriseSystem, EnterpriseSystemInput } from "../types";
 
@@ -62,9 +61,8 @@ export function createSystem(
   }).then((r) => handle<EnterpriseSystem>(r));
 }
 
-// Not used by any page yet in Phase 2 (there's no Edit form), but the
-// backend supports it and future phases will want it -- defined here
-// now so it's ready.
+// Not used by any page yet (there's no Edit form), but the backend
+// supports it and it's defined here so it's ready when one is added.
 export function updateSystem(
   id: number,
   data: Partial<EnterpriseSystemInput>,

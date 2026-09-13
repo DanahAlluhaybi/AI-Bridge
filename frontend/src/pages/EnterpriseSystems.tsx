@@ -1,10 +1,14 @@
-// The main Phase 2 page: a table of every enterprise system AI Bridge
-// knows about, with search, two filters, and a way to add a new one.
+// A table of every enterprise system AI Bridge knows about, with
+// search, two filters, and a way to add a new one.
 
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import Badge from "../components/Badge";
+import Button from "../components/Button";
+import EmptyState from "../components/EmptyState";
+import PageHeader from "../components/PageHeader";
 import AddSystemModal from "../components/AddSystemModal";
+import { IconArrowRight, IconPlus } from "../components/Icons";
 import { listSystems } from "../api/systems";
 import type { EnterpriseSystem, IntegrationType, SystemStatus } from "../types";
 import { INTEGRATION_TYPES, SYSTEM_STATUSES } from "../types";
@@ -57,21 +61,16 @@ export default function EnterpriseSystems() {
 
   return (
     <div>
-      <div className="mb-6 flex items-start justify-between">
-        <div>
-          <h2 className="text-lg font-medium">Enterprise Systems</h2>
-          <p className="text-sm text-slate-500">
-            Existing systems AI Bridge can connect to — nothing here is
-            replaced, only observed and assessed.
-          </p>
-        </div>
-        <button
-          onClick={() => setShowAddModal(true)}
-          className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800"
-        >
-          + Add System
-        </button>
-      </div>
+      <PageHeader
+        title="Enterprise Systems"
+        description="Existing systems AI Bridge can connect to — nothing here is replaced, only observed and assessed."
+        action={
+          <Button onClick={() => setShowAddModal(true)}>
+            <IconPlus className="h-4 w-4" />
+            Add system
+          </Button>
+        }
+      />
 
       <div className="mb-4 flex flex-wrap gap-3">
         <input
@@ -119,60 +118,60 @@ export default function EnterpriseSystems() {
         </p>
       )}
 
-      {!loading && !error && (
-        <div className="overflow-x-auto rounded-lg border border-slate-200 bg-white shadow-sm">
-          <table className="min-w-full divide-y divide-slate-200 text-sm">
-            <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500">
+      {!loading && !error && filtered.length === 0 && (
+        <EmptyState
+          title="No systems match your filters"
+          description="Try a different search term, or clear the status and integration filters."
+        />
+      )}
+
+      {!loading && !error && filtered.length > 0 && (
+        <div className="card overflow-x-auto">
+          <table className="min-w-full divide-y divide-slate-100 text-sm">
+            <thead className="text-left text-xs font-medium text-slate-500">
               <tr>
-                <th className="px-4 py-3">Name</th>
-                <th className="px-4 py-3">Type</th>
-                <th className="px-4 py-3">Department</th>
-                <th className="px-4 py-3">Integration</th>
-                <th className="px-4 py-3">Data Classification</th>
-                <th className="px-4 py-3">Security</th>
-                <th className="px-4 py-3">Status</th>
-                <th className="px-4 py-3" />
+                <th className="px-5 py-3">Name</th>
+                <th className="px-5 py-3">Type</th>
+                <th className="px-5 py-3">Department</th>
+                <th className="px-5 py-3">Integration</th>
+                <th className="px-5 py-3">Data Classification</th>
+                <th className="px-5 py-3">Security</th>
+                <th className="px-5 py-3">Status</th>
+                <th className="px-5 py-3" />
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {filtered.map((system) => (
                 <tr key={system.id} className="hover:bg-slate-50">
-                  <td className="px-4 py-3 font-medium">{system.name}</td>
-                  <td className="px-4 py-3 text-slate-600">
+                  <td className="px-5 py-3 font-medium text-slate-900">{system.name}</td>
+                  <td className="px-5 py-3 text-slate-600">
                     {system.system_type}
                   </td>
-                  <td className="px-4 py-3 text-slate-600">
+                  <td className="px-5 py-3 text-slate-600">
                     {system.department}
                   </td>
-                  <td className="px-4 py-3 text-slate-600">
+                  <td className="px-5 py-3 text-slate-600">
                     {system.integration_type}
                   </td>
-                  <td className="px-4 py-3">
+                  <td className="px-5 py-3">
                     <Badge label={system.data_classification} />
                   </td>
-                  <td className="px-4 py-3">
+                  <td className="px-5 py-3">
                     <Badge label={system.security_level} />
                   </td>
-                  <td className="px-4 py-3">
+                  <td className="px-5 py-3">
                     <Badge label={system.status} />
                   </td>
-                  <td className="px-4 py-3 text-right">
+                  <td className="px-5 py-3 text-right">
                     <Link
                       to={`/systems/${system.id}`}
-                      className="font-medium text-slate-700 hover:text-slate-900 hover:underline"
+                      className="inline-flex items-center gap-1 text-sm font-medium text-indigo-600 hover:text-indigo-700"
                     >
-                      View Details →
+                      Details <IconArrowRight className="h-3.5 w-3.5" />
                     </Link>
                   </td>
                 </tr>
               ))}
-              {filtered.length === 0 && (
-                <tr>
-                  <td colSpan={8} className="px-4 py-8 text-center text-slate-400">
-                    No systems match your filters.
-                  </td>
-                </tr>
-              )}
             </tbody>
           </table>
         </div>

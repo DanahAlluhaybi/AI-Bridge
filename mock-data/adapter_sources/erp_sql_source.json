@@ -1,0 +1,8 @@
+[
+  {"record_id": "V-1001", "full_name": "Faisal Al-Zahrani", "city": "Jeddah", "country": "Saudi Arabia", "phone": "+966501112222", "email": "faisal.z@vendor-example.mock", "national_id": "", "employee_id": "", "amount": 45000.00, "date_field": "2026/2/10", "notes": "Quarterly procurement contract renewal"},
+  {"record_id": "V-1002", "full_name": "Mona Al-Harbi", "city": "JEDDAH", "country": "KSA", "phone": "0509998888", "email": "", "national_id": "", "employee_id": "", "amount": 12500.50, "date_field": "10-02-2026", "notes": ""},
+  {"record_id": "V-1002", "full_name": "Mona Al-Harbi", "city": "JEDDAH", "country": "KSA", "phone": "0509998888", "email": "", "national_id": "", "employee_id": "", "amount": 12500.50, "date_field": "10-02-2026", "notes": ""},
+  {"record_id": "V-1003", "full_name": "", "city": "Riyadh", "country": "Saudi Arabia", "phone": "invalid-phone", "email": "not-an-email", "national_id": "", "employee_id": "", "amount": 8000, "date_field": "2026-02-15", "notes": "Missing vendor name on file"},
+  {"record_id": "V-1004", "full_name": "Khalid Al-Mutairi", "city": "الرياض", "country": "SA", "phone": "+966512345678", "email": "khalid.m@vendor2.mock", "national_id": "", "employee_id": "", "amount": 99000, "date_field": "15/2/2026", "notes": "Large equipment order"},
+  {"record_id": "V-1005", "full_name": "Sara Al-Qahtani", "city": "Dammam", "country": "Saudi Arabia", "phone": "", "email": "", "national_id": "", "employee_id": "", "amount": "", "date_field": "2026-02-20", "notes": "Follow-up needed"}
+]

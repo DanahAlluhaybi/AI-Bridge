@@ -1,0 +1,45 @@
+{
+  "_purpose": "Hand-defined ground truth for tests/evaluation/evaluation_runner.py. These values were worked out by hand from the rules in backend/app/adoption/decision.py and backend/app/adoption/opportunities.py before ever running the code against them -- they are the answer key, not a copy of whatever the code happens to output.",
+
+  "adoption_decisions": [
+    { "system_id": "SYS-A", "expected_decision": "Good Candidate" },
+    { "system_id": "SYS-B", "expected_decision": "Conditional" },
+    { "system_id": "SYS-C", "expected_decision": "Not Yet" },
+    { "system_id": "SYS-D", "expected_decision": "Not Yet" },
+    { "system_id": "SYS-E", "expected_decision": "Not Recommended" },
+    { "system_id": "SYS-F", "expected_decision": "Conditional" },
+    { "system_id": "SYS-G", "expected_decision": "Not Yet" },
+    { "system_id": "SYS-H", "expected_decision": "Insufficient Information" },
+    { "system_id": "SYS-I", "expected_decision": "Insufficient Information" },
+    { "system_id": "SYS-J", "expected_decision": "Not Yet" },
+    { "system_id": "SYS-K", "expected_decision": "Not Recommended" }
+  ],
+
+  "activities": [
+    { "activity_id": "ACT-001", "expected_automation_potential": "High",   "expected_business_impact": "High", "expected_automation_risk": "High",   "expected_human_oversight": "Required" },
+    { "activity_id": "ACT-002", "expected_automation_potential": "Medium", "expected_business_impact": "Medium", "expected_automation_risk": "High",   "expected_human_oversight": "Required" },
+    { "activity_id": "ACT-003", "expected_automation_potential": "High",   "expected_business_impact": "High", "expected_automation_risk": "Medium", "expected_human_oversight": "Recommended" },
+    { "activity_id": "ACT-004", "expected_automation_potential": "High",   "expected_business_impact": "High", "expected_automation_risk": "Medium", "expected_human_oversight": "Recommended" },
+    { "activity_id": "ACT-005", "expected_automation_potential": "High",   "expected_business_impact": "Medium", "expected_automation_risk": "Low",    "expected_human_oversight": "Not required" },
+    { "activity_id": "ACT-006", "expected_automation_potential": "Medium", "expected_business_impact": "Low",  "expected_automation_risk": "Low",    "expected_human_oversight": "Not required" },
+    { "activity_id": "ACT-007", "expected_automation_potential": "Low",    "expected_business_impact": "Low",  "expected_automation_risk": "High",   "expected_human_oversight": "Required" },
+    { "activity_id": "ACT-008", "expected_automation_potential": "Low",    "expected_business_impact": "Low",  "expected_automation_risk": "High",   "expected_human_oversight": "Required" },
+    { "activity_id": "ACT-009", "expected_automation_potential": "High",   "expected_business_impact": "High", "expected_automation_risk": "Low",    "expected_human_oversight": "Not required" },
+    { "activity_id": "ACT-010", "expected_automation_potential": "High",   "expected_business_impact": "High", "expected_automation_risk": "Medium", "expected_human_oversight": "Recommended" },
+    { "activity_id": "ACT-011", "expected_automation_potential": "Low",    "expected_business_impact": "Low",  "expected_automation_risk": "Low",    "expected_human_oversight": "Not required" },
+    { "activity_id": "ACT-012", "expected_automation_potential": "High",   "expected_business_impact": "High", "expected_automation_risk": "Low",    "expected_human_oversight": "Not required" },
+    { "activity_id": "ACT-013", "expected_automation_potential": "Medium", "expected_business_impact": "Low",  "expected_automation_risk": "Low",    "expected_human_oversight": "Not required" },
+    { "activity_id": "ACT-014", "expected_automation_potential": "Medium", "expected_business_impact": "Medium", "expected_automation_risk": "Medium", "expected_human_oversight": "Recommended" },
+    { "activity_id": "ACT-015", "expected_automation_potential": "Low",    "expected_business_impact": "Low",  "expected_automation_risk": "High",   "expected_human_oversight": "Required" },
+    { "activity_id": "ACT-016", "expected_automation_potential": "High",   "expected_business_impact": "High", "expected_automation_risk": "Low",    "expected_human_oversight": "Not required" },
+    { "activity_id": "ACT-017", "expected_automation_potential": "High",   "expected_business_impact": "High", "expected_automation_risk": "Medium", "expected_human_oversight": "Recommended" },
+    { "activity_id": "ACT-018", "expected_automation_potential": "High",   "expected_business_impact": "High", "expected_automation_risk": "Low",    "expected_human_oversight": "Not required" },
+    { "activity_id": "ACT-019", "expected_automation_potential": "Medium", "expected_business_impact": "Medium", "expected_automation_risk": "Medium", "expected_human_oversight": "Recommended" },
+    { "activity_id": "ACT-020", "expected_automation_potential": "Low",    "expected_business_impact": "Low",  "expected_automation_risk": "Medium", "expected_human_oversight": "Recommended" },
+    { "activity_id": "ACT-021", "expected_automation_potential": "Medium", "expected_business_impact": "Low",  "expected_automation_risk": "Low",    "expected_human_oversight": "Not required" },
+    { "activity_id": "ACT-022", "expected_automation_potential": "Medium", "expected_business_impact": "High", "expected_automation_risk": "Medium", "expected_human_oversight": "Recommended" },
+    { "activity_id": "ACT-023", "expected_automation_potential": "Low",    "expected_business_impact": "Low",  "expected_automation_risk": "High",   "expected_human_oversight": "Required" },
+    { "activity_id": "ACT-024", "expected_automation_potential": "High",   "expected_business_impact": "High", "expected_automation_risk": "High",   "expected_human_oversight": "Required" },
+    { "activity_id": "ACT-025", "expected_automation_potential": null,     "expected_business_impact": null,  "expected_automation_risk": null,     "expected_human_oversight": null }
+  ]
+}

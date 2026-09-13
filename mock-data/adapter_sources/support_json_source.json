@@ -1,0 +1,8 @@
+[
+  {"record_id": "TCK-4001", "full_name": "Fatimah Al-Zahrani", "city": "Jeddah", "country": "Saudi Arabia", "phone": "+966501122334", "email": "", "national_id": "", "employee_id": "", "amount": "", "date_field": "2026/03/01", "notes": "Customer reported login issue, resolved after password reset. Follow-up call scheduled."},
+  {"record_id": "TCK-4002", "full_name": "Yazeed Al-Harthi", "city": "JEDDAH", "country": "KSA", "phone": "invalidphone123", "email": "yazeed.h@customer-mail.mock", "national_id": "", "employee_id": "", "amount": "", "date_field": "01-03-2026", "notes": "Complaint about delayed shipment, escalated to logistics team."},
+  {"record_id": "TCK-4003", "full_name": "Dalal Al-Amri", "city": "Riyadh", "country": "Saudi Arabia", "phone": "0567788990", "email": "", "national_id": "", "employee_id": "", "amount": "", "date_field": "2026-03-02", "notes": ""},
+  {"record_id": "TCK-4004", "full_name": "Yazeed Al-Harthi", "city": "JEDDAH", "country": "KSA", "phone": "invalidphone123", "email": "yazeed.h@customer-mail.mock", "national_id": "", "employee_id": "", "amount": "", "date_field": "01-03-2026", "notes": "Complaint about delayed shipment, escalated to logistics team."},
+  {"record_id": "TCK-4005", "full_name": "", "city": "Dammam", "country": "Saudi Arabia", "phone": "+966588990011", "email": "", "national_id": "", "employee_id": "", "amount": "", "date_field": "2026/3/5", "notes": "Anonymous complaint submitted via web form"},
+  {"record_id": "TCK-4006", "full_name": "Bandar Al-Qahtani", "city": "dammam", "country": "saudi arabia", "phone": "+966599001122", "email": "bandar.q@customer-mail.mock", "national_id": "", "employee_id": "", "amount": "", "date_field": "2026-03-06", "notes": "Positive feedback on new support portal"}
+]

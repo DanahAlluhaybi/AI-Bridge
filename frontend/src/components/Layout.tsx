@@ -1,56 +1,120 @@
-// New in Phase 2. Phase 1 had exactly one page, so Dashboard.tsx drew
-// its own header. Now that we have more than one page, that header
-// (and the navigation between pages) is pulled out into a shared
-// Layout so every page looks consistent and we don't repeat ourselves.
-//
-// <Outlet /> is react-router-dom's way of saying "render whichever
-// page matched the current URL, right here" -- see App.tsx for how
-// routes are wired to this layout.
-
-import type { ReactNode } from "react";
+import { useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
+import {
+  IconBarChart,
+  IconClipboard,
+  IconClose,
+  IconHome,
+  IconLayers,
+  IconMenu,
+  IconPlay,
+  IconScroll,
+  IconShieldCheck,
+  IconShuffle,
+  IconTarget,
+} from "./Icons";
+
+const NAV_ITEMS = [
+  { to: "/", label: "Home", icon: IconHome, end: true },
+  { to: "/dashboard", label: "Dashboard", icon: IconBarChart, end: false },
+  { to: "/systems", label: "Enterprise Systems", icon: IconLayers, end: false },
+  { to: "/adapter", label: "Data Adapter", icon: IconShuffle, end: false },
+  { to: "/adoption", label: "AI Adoption", icon: IconTarget, end: false },
+  { to: "/use-cases", label: "AI Use Cases", icon: IconClipboard, end: false },
+  { to: "/approvals", label: "Approval Center", icon: IconShieldCheck, end: false },
+  { to: "/playground", label: "AI Playground", icon: IconPlay, end: false },
+  { to: "/audit-log", label: "Audit Log", icon: IconScroll, end: false },
+];
 
 export default function Layout() {
-  return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
-      <header className="border-b border-slate-200 bg-white">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <div>
-            <h1 className="text-xl font-semibold tracking-tight">
-              AI Bridge
-            </h1>
-            <p className="text-xs text-slate-500">
-              Making Enterprise Systems AI-Ready Without Replacing Them
-            </p>
-          </div>
-          <nav className="flex gap-1 text-sm font-medium">
-            <NavTab to="/">Dashboard</NavTab>
-            <NavTab to="/systems">Enterprise Systems</NavTab>
-          </nav>
-        </div>
-      </header>
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
-      <main className="mx-auto max-w-6xl px-6 py-8">
-        <Outlet />
+  return (
+    <div className="min-h-screen bg-white text-slate-900 md:flex">
+      {/* Mobile top bar -- the sidebar below is hidden until this opens it. */}
+      <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3 md:hidden">
+        <Wordmark />
+        <button
+          onClick={() => setMobileNavOpen(true)}
+          className="rounded-md p-1.5 text-slate-500 hover:bg-slate-100"
+          aria-label="Open navigation"
+        >
+          <IconMenu className="h-5 w-5" />
+        </button>
+      </div>
+
+      {mobileNavOpen && (
+        <div className="fixed inset-0 z-40 md:hidden">
+          <div
+            className="absolute inset-0 bg-slate-900/30"
+            onClick={() => setMobileNavOpen(false)}
+          />
+          <div className="absolute inset-y-0 left-0 w-64 bg-white p-4 shadow-popover">
+            <div className="mb-6 flex items-center justify-between">
+              <Wordmark />
+              <button
+                onClick={() => setMobileNavOpen(false)}
+                className="rounded-md p-1.5 text-slate-500 hover:bg-slate-100"
+                aria-label="Close navigation"
+              >
+                <IconClose className="h-5 w-5" />
+              </button>
+            </div>
+            <Nav onNavigate={() => setMobileNavOpen(false)} />
+          </div>
+        </div>
+      )}
+
+      {/* Desktop sidebar */}
+      <aside className="hidden w-60 shrink-0 border-r border-slate-200 md:flex md:flex-col md:justify-between md:px-4 md:py-5">
+        <div>
+          <div className="mb-6 px-2">
+            <Wordmark />
+          </div>
+          <Nav />
+        </div>
+        <p className="px-2 text-xs text-slate-400">Local development</p>
+      </aside>
+
+      <main className="min-w-0 flex-1">
+        <div className="mx-auto max-w-6xl px-6 py-8 md:px-10">
+          <Outlet />
+        </div>
       </main>
     </div>
   );
 }
 
-function NavTab({ to, children }: { to: string; children: ReactNode }) {
+function Wordmark() {
   return (
-    <NavLink
-      to={to}
-      end={to === "/"}
-      className={({ isActive }) =>
-        `rounded-md px-3 py-2 transition-colors ${
-          isActive
-            ? "bg-slate-900 text-white"
-            : "text-slate-600 hover:bg-slate-100"
-        }`
-      }
-    >
-      {children}
-    </NavLink>
+    <div className="flex items-center gap-2">
+      <span className="h-2 w-2 rounded-full bg-indigo-600" />
+      <span className="text-base font-semibold tracking-tight">AI Bridge</span>
+    </div>
+  );
+}
+
+function Nav({ onNavigate }: { onNavigate?: () => void }) {
+  return (
+    <nav className="space-y-0.5">
+      {NAV_ITEMS.map(({ to, label, icon: Icon, end }) => (
+        <NavLink
+          key={to}
+          to={to}
+          end={end}
+          onClick={onNavigate}
+          className={({ isActive }) =>
+            `flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm font-medium transition-colors ${
+              isActive
+                ? "bg-indigo-50 text-indigo-700"
+                : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+            }`
+          }
+        >
+          <Icon className="h-[18px] w-[18px] shrink-0" />
+          {label}
+        </NavLink>
+      ))}
+    </nav>
   );
 }

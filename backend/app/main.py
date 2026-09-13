@@ -1,42 +1,53 @@
 """
 main.py
--------
-The entry point of the backend. This is what `uvicorn app.main:app` runs.
 
-Responsibilities, and only these, on purpose:
+Application entry point -- what `uvicorn app.main:app` runs.
+
+Responsibilities, kept deliberately narrow:
 1. Create the FastAPI application object.
-2. Make sure the database tables exist.
-3. Seed example data if the database is empty (Phase 2).
-4. Allow the frontend (running on a different port) to call us (CORS).
-5. Wire up the routers (health, and now enterprise systems).
+2. Ensure the database tables exist.
+3. Seed example data if the database is empty.
+4. Allow the frontend (a different port) to call the API (CORS).
+5. Wire up the routers.
 
-Business logic (readiness scoring, risk rules, governance policies...)
-will live in their own modules in later phases -- main.py stays thin
-forever, it's just the "switchboard".
+Business logic lives in its own modules (adapter/, readiness/, and
+whatever comes next) so this file stays a thin switchboard.
 """
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from .database import Base, SessionLocal, engine
-from .routers import health, systems
-from .seed_data import seed_enterprise_systems
+from .routers import (
+    adapter,
+    adoption,
+    approvals,
+    audit_log,
+    health,
+    playground,
+    readiness,
+    risk,
+    systems,
+    use_cases,
+)
+from .seed_data import seed_adapter_sources, seed_enterprise_systems, seed_system_activities
 
-# Create any tables defined in models.py that don't exist yet.
-# In a real production system you'd use migrations (e.g. Alembic) instead
-# of this, so that changing a table doesn't risk losing data. For a local
-# learning MVP with a disposable SQLite file, this is the simplest honest
-# option -- we'll call out explicitly if/when we outgrow it.
+# Creates any tables defined in models.py that don't exist yet. A real
+# production system would use migrations (e.g. Alembic) instead, so a
+# schema change doesn't risk existing data -- fine to defer for a
+# local, disposable SQLite file.
 Base.metadata.create_all(bind=engine)
 
-# Insert the five example enterprise systems, but only the first time
-# this database is used (see seed_data.py -- it checks before inserting).
-# We open and close a session manually here because this runs once at
-# startup, outside of any HTTP request, so there's no `Depends(get_db)`
-# to do it for us.
+# Seeds example data once, only if each table is empty (see
+# seed_data.py). Runs in its own session since it happens at startup,
+# outside any HTTP request.
 _startup_db = SessionLocal()
 try:
     seed_enterprise_systems(_startup_db)
+    # Both must run after seed_enterprise_systems -- adapter sources
+    # and system activities are looked up by enterprise system name.
+    seed_adapter_sources(_startup_db)
+    seed_system_activities(_startup_db)
 finally:
     _startup_db.close()
 
@@ -44,17 +55,16 @@ app = FastAPI(
     title="AI Bridge API",
     description=(
         "Backend for AI Bridge — an Enterprise AI Infrastructure platform. "
-        "Phase 2: Foundation + simulated Enterprise Systems "
-        "(no readiness/risk/governance logic yet)."
+        "Enterprise Systems + Legacy-to-AI Adapter + AI Readiness Assessment + "
+        "AI Risk Engine + AI Adoption & Automation Opportunities + AI Use Cases, "
+        "Human Approval, AI Passport, AI Playground & Audit Log."
     ),
-    version="0.2.0",
+    version="0.7.0",
 )
 
-# Browsers block a webpage on one origin (http://localhost:5173, the Vite
-# dev server) from calling an API on a different origin (http://localhost:8000)
-# unless the API explicitly allows it. This is CORS (Cross-Origin Resource
-# Sharing). In production you'd list your real frontend domain here instead
-# of localhost.
+# Lets the Vite dev server (http://localhost:5173) call this API from
+# the browser. A production deployment would list the real frontend
+# origin here instead of localhost.
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173"],
@@ -65,6 +75,14 @@ app.add_middleware(
 
 app.include_router(health.router, prefix="/api", tags=["health"])
 app.include_router(systems.router, prefix="/api", tags=["enterprise-systems"])
+app.include_router(adapter.router, prefix="/api", tags=["legacy-to-ai-adapter"])
+app.include_router(readiness.router, prefix="/api", tags=["ai-readiness-assessment"])
+app.include_router(risk.router, prefix="/api", tags=["ai-risk-engine"])
+app.include_router(adoption.router, prefix="/api", tags=["ai-adoption"])
+app.include_router(use_cases.router, prefix="/api", tags=["ai-use-cases"])
+app.include_router(approvals.router, prefix="/api", tags=["human-approval"])
+app.include_router(playground.router, prefix="/api", tags=["ai-playground"])
+app.include_router(audit_log.router, prefix="/api", tags=["audit-log"])
 
 
 @app.get("/")

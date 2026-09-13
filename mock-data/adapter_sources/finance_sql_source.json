@@ -1,0 +1,8 @@
+[
+  {"record_id": "INV-3001", "full_name": "Nawaf Al-Rashidi", "city": "Jeddah", "country": "Saudi Arabia", "phone": "+966501234567", "email": "nawaf.r@client-example.mock", "national_id": "", "employee_id": "", "amount": 152300.75, "date_field": "2026-01-05", "notes": "Q4 settlement invoice"},
+  {"record_id": "INV-3002", "full_name": "شركة الفا للتجارة", "city": "جدة", "country": "المملكة العربية السعودية", "phone": "0112223344", "email": "", "national_id": "", "employee_id": "", "amount": 8750.00, "date_field": "05/01/2026", "notes": "Recurring monthly invoice"},
+  {"record_id": "INV-3003", "full_name": "Reem Al-Subaie", "city": "Khobar", "country": "Saudi Arabia", "phone": "", "email": "reem.s@client2.mock", "national_id": "", "employee_id": "", "amount": "N/A", "date_field": "2026-01-12", "notes": ""},
+  {"record_id": "INV-3003", "full_name": "Reem Al-Subaie", "city": "Khobar", "country": "Saudi Arabia", "phone": "", "email": "reem.s@client2.mock", "national_id": "", "employee_id": "", "amount": "N/A", "date_field": "2026-01-12", "notes": ""},
+  {"record_id": "INV-3004", "full_name": "Omar Al-Tuwaijri", "city": "Makkah", "country": "Saudi Arabia", "phone": "+966533445566", "email": "omar.t@client3.mock", "national_id": "1067890123", "employee_id": "", "amount": 44200.00, "date_field": "20-1-2026", "notes": "Includes late payment penalty"},
+  {"record_id": "INV-3005", "full_name": "", "city": "Riyadh", "country": "Saudi Arabia", "phone": "+966544556677", "email": "", "national_id": "", "employee_id": "", "amount": 6100.00, "date_field": "2026-01-25", "notes": "Client name missing from export"}
+]
